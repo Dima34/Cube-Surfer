@@ -4,17 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.Factories;
 using Infrastructure.Services.CoroutineRunner;
+using Infrastructure.Services.StaticData;
 using Infrastructure.StateMachines.GameStateMachine;
 using Infrastructure.StateMachines.GameStateMachine.States;
+using StaticData;
 using UnityEngine;
 using Zenject;
 
 namespace Infrastructure.Logic.Player
 {
-    [RequireComponent(typeof(BoxCollider))]
     public class CubeHolder : MonoBehaviour
     {
-        [SerializeField] private GameObject _playerObject;
+        [SerializeField] private Transform _stickman;
 
         private ICoroutineRunnerService _coroutineRunnerService;
         private List<GameObject> _activeCubes = new List<GameObject>();
@@ -22,15 +23,24 @@ namespace Infrastructure.Logic.Player
         private bool _isAddingProcess;
         private IGameStateMachine _gameStateMachine;
         private EndGameState _endGameState;
+        private float _floorYCoordinate;
         public event Action OnGameEnd;
         public event Action OnCubeAdded;
+        
+        private const float SECURITY_Y_SPAWN_OFFSET = 0.05f;
 
         [Inject]
-        public void Construct(ICoroutineRunnerService coroutineRunnerService, IGameFactory gameFactory)
+        public void Construct(ICoroutineRunnerService coroutineRunnerService, IGameFactory gameFactory, IStaticDataService staticDataService)
         {
             _gameFactory = gameFactory;
             _coroutineRunnerService = coroutineRunnerService;
+
+            LevelStaticData currentLevelData = staticDataService.GetCurrentLevelData();
+            CalculateFloorYCoordinate(currentLevelData);
         }
+
+        private void CalculateFloorYCoordinate(LevelStaticData currentLevelData) =>
+            _floorYCoordinate = currentLevelData.StartSectionPosition.y + currentLevelData.TrackHeight / 2;
 
         private void Start() =>
             AddCubeSilent();
@@ -44,7 +54,7 @@ namespace Infrastructure.Logic.Player
         public void AddCubeSilent()
         {
             if (!_isAddingProcess)
-                _coroutineRunnerService.Run(AddCubeProcess());
+                _coroutineRunnerService.Run(AddCubeSilentProcess());
         }
 
         private IEnumerator AddCubeProcess()
@@ -70,14 +80,16 @@ namespace Infrastructure.Logic.Player
 
         private void SpawnCube()
         {
+            MoveStickmanOnTop();
+            
             GameObject spawnedCube = SpawnCollectedCube();
-            LiftPlayerUp(spawnedCube.transform.localScale.y);
-
             _activeCubes.Add(spawnedCube);
         }
-
-        private void LiftPlayerUp(float liftAmount) =>
-            _playerObject.transform.position += liftAmount * transform.up;
+        private void MoveStickmanOnTop()
+        {
+            Vector3 oldPos = _stickman.transform.position;
+            _stickman.transform.position = new Vector3(oldPos.x, _floorYCoordinate +_activeCubes.Count + 1 + SECURITY_Y_SPAWN_OFFSET, oldPos.z);
+        }
 
         private GameObject SpawnCollectedCube()
         {
@@ -94,21 +106,24 @@ namespace Infrastructure.Logic.Player
 
         private Vector3 GetCubeSpawnPoint(float cubeHeight)
         {
-            Vector3 prevObjPosition = transform.position + transform.up * (cubeHeight / 2);
+            Vector3 prevObjPosition = transform.position;
 
             if (_activeCubes.Count > 0)
                 prevObjPosition = _activeCubes.Last().transform.position;
 
-            return GetYOffestPosBasedOnPrevObject(cubeHeight, prevObjPosition);
+            return GetYOffsetPosBasedOnPrevObject(cubeHeight, prevObjPosition);
         }
 
-        private static Vector3 GetYOffestPosBasedOnPrevObject(float cubeHeight, Vector3 previousObjPos) =>
-            new(previousObjPos.x, previousObjPos.y - cubeHeight, previousObjPos.z);
+        private static Vector3 GetYOffsetPosBasedOnPrevObject(float cubeHeight, Vector3 previousObjPos) =>
+            new(previousObjPos.x, previousObjPos.y + cubeHeight / 2 + SECURITY_Y_SPAWN_OFFSET, previousObjPos.z);
+
 
         public void RemoveCube(GameObject cubeToRemove)
         {
             int cubeToRemoveIndex = _activeCubes.IndexOf(cubeToRemove);
-            if (cubeToRemoveIndex == 0)
+            int lastCubeIndex = _activeCubes.Count - 1;
+            
+            if (cubeToRemoveIndex == lastCubeIndex)
                 EndGame();
 
             _activeCubes.Remove(cubeToRemove);

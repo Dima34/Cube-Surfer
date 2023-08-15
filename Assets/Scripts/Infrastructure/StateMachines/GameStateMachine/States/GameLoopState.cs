@@ -39,7 +39,7 @@ namespace Infrastructure.StateMachines.GameStateMachine.States
         public void Exit()
         {
             _cubeHolder.OnGameEnd -= GoToEndgameState;
-            _stickmanOnTouchCollider.OnGameEnd -= GoToEndgameState;
+            // _stickmanOnTouchCollider.OnGameEnd -= GoToEndgameState;
 
             StopPlayerMoving();
         }

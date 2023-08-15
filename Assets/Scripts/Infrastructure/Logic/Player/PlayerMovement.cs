@@ -5,7 +5,6 @@ using Zenject;
 
 namespace Infrastructure.Logic.Player
 {
-    [RequireComponent(typeof(Rigidbody))]
     public class PlayerMovement : MonoBehaviour
     {
         private float _forwardSpeed;
