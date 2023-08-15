@@ -17,5 +17,6 @@ namespace Infrastructure.Constants
         public static string ENDGAME_HUD = "UI/EndGameHUD";
         public static string TRAIL = "Trail";
         public static string CUBE_COLLECTED_TEXT = "CollectCubeText";
+        public static string WARP_EFFECT = "WarpEffect";
     }
 }

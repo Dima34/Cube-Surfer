@@ -24,3 +24,4 @@ MonoBehaviour:
   BlockSpawnSafezonePercentX: 20
   LastBlockChance: 35
   BlockInSectionAmount: 4
+  WarpEffectOffset: {x: 0, y: 0, z: 20}

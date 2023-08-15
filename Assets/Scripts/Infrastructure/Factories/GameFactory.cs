@@ -19,6 +19,7 @@ namespace Infrastructure.Factories
         private GameObject _sectionRespawner;
         private GameObject _trail;
         private List<CubePickupText> _cubePickupTexts = new List<CubePickupText>();
+        private GameObject _warpEffect;
 
         public List<GameObject> ActiveLevelSections => _activeLevelSections;
         public GameObject Player => _player;
@@ -37,12 +38,6 @@ namespace Infrastructure.Factories
             return _player;
         }
 
-        public void DestroyPlayer()
-        {
-            _container.Unbind<CubeHolder>();
-            Object.Destroy(_player);
-        }
-
         private void BindCubeHolder(GameObject player)
         {
             CubeHolder cubeHolder = player.GetComponentInChildren<CubeHolder>();
@@ -57,9 +52,6 @@ namespace Infrastructure.Factories
             _sectionRespawner = _container.InstantiatePrefabResource(ResourcePaths.SECTION_RESPAWNER);
             return _sectionRespawner;
         }
-
-        public void DestroySectionRespawner() =>
-            Object.Destroy(_sectionRespawner);
 
         public GameObject CreateTrail()
         {
@@ -79,9 +71,6 @@ namespace Infrastructure.Factories
             return virtualCamera;
         }
 
-        public void DestroyCamera() =>
-            Object.Destroy(_camera.gameObject);
-
         public GameObject SpawnSectionAndAddToActiveList()
         {
             GameObject levelSection = _container
@@ -90,20 +79,6 @@ namespace Infrastructure.Factories
             _activeLevelSections.Add(levelSection);
 
             return levelSection;
-        }
-
-        public void DestroySection(GameObject levelSection)
-        {
-            _activeLevelSections.Remove(levelSection);
-            Object.Destroy(levelSection);
-        }
-
-        public void DestroyAllASections()
-        {
-            for (var i = _activeLevelSections.Count - 1; i >= 0; i--)
-                Object.Destroy(_activeLevelSections[i].gameObject);
-
-            _activeLevelSections = new List<GameObject>();
         }
 
         public GameObject SpawnGround() =>
@@ -129,12 +104,47 @@ namespace Infrastructure.Factories
             return text;
         }
 
+        public GameObject SpawnWarpEffect()
+        {
+            _warpEffect = _container.InstantiatePrefabResource(ResourcePaths.WARP_EFFECT);
+            return _warpEffect;
+        }
+
+        public void DestroyWarpEffect() =>
+            Object.Destroy(_warpEffect);
+        
+        public void DestroyPlayer()
+        {
+            _container.Unbind<CubeHolder>();
+            Object.Destroy(_player);
+        }
+
+        public void DestroySectionRespawner() =>
+            Object.Destroy(_sectionRespawner);
+
+        public void DestroyCamera() =>
+            Object.Destroy(_camera.gameObject);
+
+        public void DestroySection(GameObject levelSection)
+        {
+            _activeLevelSections.Remove(levelSection);
+            Object.Destroy(levelSection);
+        }
+
+        public void DestroyAllASections()
+        {
+            for (var i = _activeLevelSections.Count - 1; i >= 0; i--)
+                Object.Destroy(_activeLevelSections[i].gameObject);
+
+            _activeLevelSections = new List<GameObject>();
+        }
+
         public void DestroyAllCubePickupText()
         {
             for (var i = _cubePickupTexts.Count - 1; i >= 0; i--)
                 DestroyCubePickupText(_cubePickupTexts[i]);
         }
-        
+
         public void DestroyCubePickupText(CubePickupText text)
         {
             _cubePickupTexts.Remove(text);

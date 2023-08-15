@@ -28,5 +28,7 @@ namespace Infrastructure.Factories
         CubePickupText SpawnCubePickupText();
         void DestroyCubePickupText(CubePickupText text);
         void DestroyAllCubePickupText();
+        GameObject SpawnWarpEffect();
+        void DestroyWarpEffect();
     }
 }

@@ -25,5 +25,6 @@ namespace StaticData
         public float BlockSpawnSafezonePercentX;
         public int LastBlockChance;
         [Min(1)] public int BlockInSectionAmount;
+        public Vector3 WarpEffectOffset;
     }
 }

@@ -117,7 +117,6 @@ namespace Infrastructure.Logic.Player
         private static Vector3 GetYOffsetPosBasedOnPrevObject(float cubeHeight, Vector3 previousObjPos) =>
             new(previousObjPos.x, previousObjPos.y + cubeHeight / 2 + SECURITY_Y_SPAWN_OFFSET, previousObjPos.z);
 
-
         public void RemoveCube(GameObject cubeToRemove)
         {
             int cubeToRemoveIndex = _activeCubes.IndexOf(cubeToRemove);

@@ -30,6 +30,7 @@ namespace Infrastructure.Logic
             CreateTrail(player);
             CreateCamera(player.gameObject);
             CreateSectionRespawner(player.gameObject);
+            CreateWarpEffect(player.gameObject);
         }
 
         private GameObject CreatePlayer()
@@ -101,8 +102,19 @@ namespace Infrastructure.Logic
         private void CreateSectionRespawner(GameObject player)
         {
             GameObject sectionRespawner = _gameFactory.SpawnSectionRespawner();
-            ObjectFollower objectFollower = sectionRespawner.GetComponent<ObjectFollower>();
-            objectFollower.Initialize(player.transform, _levelStaticData.SectionRespawnerOffset);
+            SetupObjectFollower(player, sectionRespawner, _levelStaticData.SectionRespawnerOffset);
+        }
+
+        private void CreateWarpEffect(GameObject player)
+        {
+            GameObject warpEffect = _gameFactory.SpawnWarpEffect();
+            SetupObjectFollower(player, warpEffect, _levelStaticData.WarpEffectOffset);
+        }
+
+        private void SetupObjectFollower(GameObject objectToFollow, GameObject objectToSetup, Vector3 offset)
+        {
+            ObjectFollower objectFollower = objectToSetup.GetComponent<ObjectFollower>();
+            objectFollower.Initialize(objectToFollow.transform, offset);
         }
 
         public void RemoveSection(GameObject gameObject)
@@ -142,8 +154,14 @@ namespace Infrastructure.Logic
             DestroyTrail();
             DestroyCamera();
             DestroySectionRespawner();
+            DestroyWarpEffect();
         }
-        
+
+        private void DestroyWarpEffect()
+        {
+            _gameFactory.DestroyWarpEffect();
+        }
+
         private void DestroyPlayer() =>
             _gameFactory.DestroyPlayer();
 
