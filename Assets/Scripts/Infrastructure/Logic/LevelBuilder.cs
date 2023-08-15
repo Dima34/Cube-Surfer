@@ -140,10 +140,12 @@ namespace Infrastructure.Logic
         private void PlaySectionAnim(GameObject section) =>
             section.GetComponentInChildren<Animation>().enabled = true;
 
-        public void SpawnPickupText(Vector3 at)
+        public void SpawnPickupText(Transform parentTransform)
         {
             CubePickupText pickupText = _gameFactory.SpawnCubePickupText();
-            pickupText.transform.position = at;
+            
+            pickupText.transform.SetParent(parentTransform);
+            pickupText.transform.position = parentTransform.position;
         }
 
         public void CleanupLevel()

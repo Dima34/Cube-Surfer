@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Zenject;
 
@@ -11,10 +10,8 @@ namespace Infrastructure.Logic.Player
         private LevelBuilder _levelBuilder;
 
         [Inject]
-        public void Construct(LevelBuilder levelBuilder)
-        {
+        public void Construct(LevelBuilder levelBuilder) =>
             _levelBuilder = levelBuilder;
-        }
 
         private void Start() =>
             _cubeHolder.OnCubeAdded += SpawnText;
@@ -23,6 +20,6 @@ namespace Infrastructure.Logic.Player
             _cubeHolder.OnCubeAdded -= SpawnText;
 
         private void SpawnText() =>
-            _levelBuilder.SpawnPickupText(_spawnFromTransform.position);
+            _levelBuilder.SpawnPickupText(_spawnFromTransform);
     }
 }
