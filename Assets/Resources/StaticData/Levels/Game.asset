@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186650d85b104cc3a89d38632210dfae, type: 3}
+  m_Name: Game
+  m_EditorClassIdentifier: 
+  LevelName: Game
+  MaxSections: 4
+  TrackWidth: 5
+  TrackHeight: 5
+  TrackLength: 30
+  StartSectionPosition: {x: 0, y: 0, z: 0}
+  PlayerSpawnPoint: {x: 0, y: 2.5, z: 0}
+  SectionRespawnerOffset: {x: 0, y: 0, z: -20}
+  BlockSpawnSafezonePercentZ: 33
+  BlockSpawnSafezonePercentX: 20
+  LastBlockChance: 35
+  BlockInSectionAmount: 4
