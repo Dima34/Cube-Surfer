@@ -12,10 +12,12 @@ namespace Infrastructure.Logic
         private CubeHolder _cubeHolder;
         private bool _isRemovingProcess;
         private ICoroutineRunnerService _coroutineRunner;
+        private CameraShaker _cameraShaker;
 
         [Inject]
-        public void Construct(CubeHolder cubeHolder, ICoroutineRunnerService coroutineRunner)
+        public void Construct(CubeHolder cubeHolder, ICoroutineRunnerService coroutineRunner, CameraShaker cameraShaker)
         {
+            _cameraShaker = cameraShaker;
             _coroutineRunner = coroutineRunner;
             _cubeHolder = cubeHolder;
         }
@@ -23,8 +25,14 @@ namespace Infrastructure.Logic
         private void OnCollisionEnter(Collision collision)
         {
             if (CollisionIsWallBlock(collision) && RemovingProccessNotRun())
+            {
+                ShakeCamera();
                 _coroutineRunner.Run(RemoveCubeProcess(collision));
+            }
         }
+
+        private void ShakeCamera() =>
+            _cameraShaker.Shake();
 
         private IEnumerator RemoveCubeProcess(Collision collision)
         {

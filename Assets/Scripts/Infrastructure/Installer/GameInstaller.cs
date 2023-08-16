@@ -1,9 +1,9 @@
 using Infrastructure.Factories;
 using Infrastructure.Factories.UI;
 using Infrastructure.Logic;
+using Infrastructure.Services.CoroutineRunner;
 using Infrastructure.Services.Death;
 using Infrastructure.Services.Input;
-using Infrastructure.Services.Random;
 using Infrastructure.Services.WallsProvider;
 using Infrastructure.StateMachines.GameStateMachine;
 using Infrastructure.StateMachines.GameStateMachine.States;
@@ -17,8 +17,8 @@ namespace Infrastructure.Installer
         public override void InstallBindings()
         {
             BindSelfAsInitializable();
+            BindCoroutineRunner();
             BindInputService();
-            BindRandomService();
             BindWallsProvider();
             BindDeathService();
             BindGameFactory();
@@ -27,22 +27,24 @@ namespace Infrastructure.Installer
             BindStateMachineStatesFactory();
             BindGameStateMachine();
         }
+        
+        private void BindCoroutineRunner() =>
+            Container
+                .BindInterfacesAndSelfTo<CoroutineRunnerService>()
+                .FromNewComponentOn(gameObject)
+                .AsSingle();
 
-        private void BindDeathService()
-        {
+        private void BindDeathService() =>
             Container
                 .Bind<IDeathService>()
                 .To<DeathService>()
                 .AsSingle();
-        }
 
-        private void BindWallsProvider()
-        {
+        private void BindWallsProvider() =>
             Container
                 .Bind<IWallsProviderService>()
                 .To<WallsProviderService>()
                 .AsSingle();
-        }
 
         private void BindSelfAsInitializable() =>
             Container
@@ -64,12 +66,6 @@ namespace Infrastructure.Installer
                 .FromInstance(inputService)
                 .AsSingle();
         }
-
-        private void BindRandomService() =>
-            Container
-                .Bind<IRandomService>()
-                .To<RandomService>()
-                .AsSingle();
 
         private void BindUIFactory() =>
             Container

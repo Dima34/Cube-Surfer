@@ -11,18 +11,19 @@ namespace Infrastructure.Factories
         GameObject SpawnSectionAndAddToActiveList();
         GameObject SpawnSectionRespawner();
         GameObject SpawnPlayerAndRegisterCubeHolder();
-        CinemachineVirtualCamera SpawnCamera();
+        CinemachineVirtualCamera SpawnCameraAndBindCameraChaker();
         List<GameObject> ActiveLevelSections { get; }
         GameObject Player { get; }
         GameObject WarpEffect { get; }
+        GameObject Camera { get; }
         void DestroySection(GameObject levelSection);
         GameObject SpawnGround();
         GameObject CreateCollectableCube();
         GameObject SpawnCollectedCube();
         GameObject SpawnRandomWall();
-        void DestroyPlayer();
+        void DestroyPlayerAndUnbindCubeHolder();
         void DestroyAllASections();
-        void DestroyCamera();
+        void DestroyCameraAndUnbindCameraShaker();
         void DestroySectionRespawner();
         GameObject CreateTrail();
         void DestroyTrail();

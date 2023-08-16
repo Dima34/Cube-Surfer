@@ -1,4 +1,4 @@
-using Infrastructure.Services.CoroutineRunner;
+using Infrastructure.Services.Random;
 using Infrastructure.Services.SceneLoad;
 using Infrastructure.Services.StaticData;
 using Zenject;
@@ -9,15 +9,16 @@ namespace Infrastructure.Installer
     {
         public override void InstallBindings()
         {
-            BindCoroutineRunner();
             BindSceneService();
             BindStaticDataService();
+            BindRandomService();
+
         }
 
-        private void BindCoroutineRunner() =>
+        private void BindRandomService() =>
             Container
-                .BindInterfacesAndSelfTo<CoroutineRunnerService>()
-                .FromNewComponentOn(gameObject)
+                .Bind<IRandomService>()
+                .To<RandomService>()
                 .AsSingle();
 
         private void BindSceneService()

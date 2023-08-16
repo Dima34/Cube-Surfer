@@ -95,7 +95,7 @@ namespace Infrastructure.Logic
 
         private void CreateCamera(GameObject player)
         {
-            CinemachineVirtualCamera camera = _gameFactory.SpawnCamera();
+            CinemachineVirtualCamera camera = _gameFactory.SpawnCameraAndBindCameraChaker();
             camera.Follow = player.transform;
         }
 
@@ -163,7 +163,7 @@ namespace Infrastructure.Logic
             _gameFactory.DestroyWarpEffect();
 
         private void DestroyPlayer() =>
-            _gameFactory.DestroyPlayer();
+            _gameFactory.DestroyPlayerAndUnbindCubeHolder();
 
         private void DestroyAllPickupText() =>
             _gameFactory.DestroyAllCubePickupText();
@@ -175,7 +175,7 @@ namespace Infrastructure.Logic
             _gameFactory.DestroyTrail();
 
         private void DestroyCamera() =>
-            _gameFactory.DestroyCamera();
+            _gameFactory.DestroyCameraAndUnbindCameraShaker();
 
         private void DestroySectionRespawner() =>
             _gameFactory.DestroySectionRespawner();

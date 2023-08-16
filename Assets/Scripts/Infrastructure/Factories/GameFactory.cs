@@ -25,6 +25,8 @@ namespace Infrastructure.Factories
         public GameObject Player => _player;
         public GameObject WarpEffect => _warpEffect;
 
+        public GameObject Camera => _camera;
+
         public GameFactory(DiContainer container, IWallsProviderService wallsProviderService)
         {
             _wallsProviderService = wallsProviderService;
@@ -63,13 +65,24 @@ namespace Infrastructure.Factories
         public void DestroyTrail() =>
             Object.Destroy(_trail);
 
-        public CinemachineVirtualCamera SpawnCamera()
+        public CinemachineVirtualCamera SpawnCameraAndBindCameraChaker()
         {
             _camera = _container
                 .InstantiatePrefabResource(ResourcePaths.CAMERA);
+
+            BindCameraShaker(_camera);
             
             CinemachineVirtualCamera virtualCamera = _camera.GetComponentInChildren<CinemachineVirtualCamera>();
             return virtualCamera;
+        }
+
+        private void BindCameraShaker(GameObject camera)
+        {
+            CameraShaker cameraShaker = _camera.GetComponent<CameraShaker>();
+            _container
+                .Bind<CameraShaker>()
+                .FromInstance(cameraShaker)
+                .AsCached();
         }
 
         public GameObject SpawnSectionAndAddToActiveList()
@@ -116,7 +129,7 @@ namespace Infrastructure.Factories
         public void DestroyWarpEffect() =>
             Object.Destroy(_warpEffect);
         
-        public void DestroyPlayer()
+        public void DestroyPlayerAndUnbindCubeHolder()
         {
             _container.Unbind<CubeHolder>();
             Object.Destroy(_player);
@@ -125,8 +138,11 @@ namespace Infrastructure.Factories
         public void DestroySectionRespawner() =>
             Object.Destroy(_sectionRespawner);
 
-        public void DestroyCamera() =>
+        public void DestroyCameraAndUnbindCameraShaker()
+        {
+            _container.Unbind<CameraShaker>();
             Object.Destroy(_camera.gameObject);
+        }
 
         public void DestroySection(GameObject levelSection)
         {
