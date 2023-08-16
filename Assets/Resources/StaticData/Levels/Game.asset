@@ -18,7 +18,7 @@ MonoBehaviour:
   TrackHeight: 5
   TrackLength: 30
   StartSectionPosition: {x: 0, y: 0, z: 0}
-  PlayerSpawnPoint: {x: 0, y: 2.5, z: 0}
+  PlayerSpawnPoint: {x: 0, y: 2.5, z: 10}
   SectionRespawnerOffset: {x: 0, y: 0, z: -20}
   BlockSpawnSafezonePercentZ: 33
   BlockSpawnSafezonePercentX: 20
