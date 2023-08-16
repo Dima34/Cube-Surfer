@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Infrastructure.Factories;
 using Infrastructure.Services.CoroutineRunner;
+using Infrastructure.Services.Death;
 using Infrastructure.Services.StaticData;
 using Infrastructure.StateMachines.GameStateMachine;
 using Infrastructure.StateMachines.GameStateMachine.States;
@@ -24,14 +25,15 @@ namespace Infrastructure.Logic.Player
         private IGameStateMachine _gameStateMachine;
         private EndGameState _endGameState;
         private float _floorYCoordinate;
-        public event Action OnGameEnd;
+        private IDeathService _deathService;
         public event Action OnCubeAdded;
         
         private const float SECURITY_Y_SPAWN_OFFSET = 0.05f;
 
         [Inject]
-        public void Construct(ICoroutineRunnerService coroutineRunnerService, IGameFactory gameFactory, IStaticDataService staticDataService)
+        public void Construct(ICoroutineRunnerService coroutineRunnerService, IGameFactory gameFactory, IStaticDataService staticDataService, IDeathService deathService)
         {
+            _deathService = deathService;
             _gameFactory = gameFactory;
             _coroutineRunnerService = coroutineRunnerService;
 
@@ -129,7 +131,7 @@ namespace Infrastructure.Logic.Player
         }
 
         private void EndGame() =>
-            OnGameEnd?.Invoke();
+            _deathService.Die();
         
         private void InvokeCubeAddedEvent() =>
             OnCubeAdded?.Invoke();

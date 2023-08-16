@@ -1,6 +1,7 @@
 using Infrastructure.Factories;
 using Infrastructure.Factories.UI;
 using Infrastructure.Logic;
+using Infrastructure.Services.Death;
 using Infrastructure.Services.Input;
 using Infrastructure.Services.Random;
 using Infrastructure.Services.WallsProvider;
@@ -19,11 +20,20 @@ namespace Infrastructure.Installer
             BindInputService();
             BindRandomService();
             BindWallsProvider();
+            BindDeathService();
             BindGameFactory();
             BindUIFactory();
             BindLevelBuilder();
             BindStateMachineStatesFactory();
             BindGameStateMachine();
+        }
+
+        private void BindDeathService()
+        {
+            Container
+                .Bind<IDeathService>()
+                .To<DeathService>()
+                .AsSingle();
         }
 
         private void BindWallsProvider()

@@ -1,5 +1,6 @@
 using Infrastructure.Factories;
 using Infrastructure.Logic.Player;
+using Infrastructure.Services.Death;
 using Unity.VisualScripting;
 using Zenject;
 
@@ -12,10 +13,12 @@ namespace Infrastructure.StateMachines.GameStateMachine.States
         private IGameStateMachine _gameStateMachine;
         private CubeHolder _cubeHolder;
         private ColliderOnWallTouchEndGame _stickmanOnTouchCollider;
+        private IDeathService _deathService;
 
-        public GameLoopState(IGameFactory gameFactory, IGameStateMachine gameStateMachine)
+        public GameLoopState(IGameFactory gameFactory, IGameStateMachine gameStateMachine, IDeathService deathService)
         {
             _gameStateMachine = gameStateMachine;
+            _deathService = deathService;
             _gameFactory = gameFactory;
         }
 
@@ -29,8 +32,8 @@ namespace Infrastructure.StateMachines.GameStateMachine.States
             _stickmanOnTouchCollider = _gameFactory.Player.GetComponentInChildren<ColliderOnWallTouchEndGame>();
 
             StartPlayerMoving();
-            _cubeHolder.OnGameEnd += GoToEndgameState;
-            _stickmanOnTouchCollider.OnGameEnd += GoToEndgameState;
+
+            _deathService.Happend += GoToEndgameState;
         }
 
         private void GoToEndgameState() =>
@@ -38,8 +41,7 @@ namespace Infrastructure.StateMachines.GameStateMachine.States
 
         public void Exit()
         {
-            _cubeHolder.OnGameEnd -= GoToEndgameState;
-            // _stickmanOnTouchCollider.OnGameEnd -= GoToEndgameState;
+            _deathService.Happend -= GoToEndgameState;
 
             StopPlayerMoving();
         }
