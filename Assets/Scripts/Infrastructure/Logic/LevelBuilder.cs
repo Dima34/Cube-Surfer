@@ -30,7 +30,7 @@ namespace Infrastructure.Logic
             CreateTrail(player);
             CreateCamera(player.gameObject);
             CreateSectionRespawner(player.gameObject);
-            CreateWarpEffect(player.gameObject);
+            CreateWarpEffectDisabled(player.gameObject);
         }
 
         private GameObject CreatePlayer()
@@ -105,9 +105,9 @@ namespace Infrastructure.Logic
             SetupObjectFollower(player, sectionRespawner, _levelStaticData.SectionRespawnerOffset);
         }
 
-        private void CreateWarpEffect(GameObject player)
+        private void CreateWarpEffectDisabled(GameObject player)
         {
-            GameObject warpEffect = _gameFactory.SpawnWarpEffect();
+            GameObject warpEffect = _gameFactory.SpawnWarpEffectDisabled();
             SetupObjectFollower(player, warpEffect, _levelStaticData.WarpEffectOffset);
         }
 
@@ -159,10 +159,8 @@ namespace Infrastructure.Logic
             DestroyWarpEffect();
         }
 
-        private void DestroyWarpEffect()
-        {
+        private void DestroyWarpEffect() =>
             _gameFactory.DestroyWarpEffect();
-        }
 
         private void DestroyPlayer() =>
             _gameFactory.DestroyPlayer();

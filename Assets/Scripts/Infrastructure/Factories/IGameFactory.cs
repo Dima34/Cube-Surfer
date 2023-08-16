@@ -14,6 +14,7 @@ namespace Infrastructure.Factories
         CinemachineVirtualCamera SpawnCamera();
         List<GameObject> ActiveLevelSections { get; }
         GameObject Player { get; }
+        GameObject WarpEffect { get; }
         void DestroySection(GameObject levelSection);
         GameObject SpawnGround();
         GameObject CreateCollectableCube();
@@ -28,7 +29,7 @@ namespace Infrastructure.Factories
         CubePickupText SpawnCubePickupText();
         void DestroyCubePickupText(CubePickupText text);
         void DestroyAllCubePickupText();
-        GameObject SpawnWarpEffect();
+        GameObject SpawnWarpEffectDisabled();
         void DestroyWarpEffect();
     }
 }

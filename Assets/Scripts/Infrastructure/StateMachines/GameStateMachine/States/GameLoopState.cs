@@ -11,8 +11,6 @@ namespace Infrastructure.StateMachines.GameStateMachine.States
         private IGameFactory _gameFactory;
         private PlayerMovement _playerMovement;
         private IGameStateMachine _gameStateMachine;
-        private CubeHolder _cubeHolder;
-        private ColliderOnWallTouchEndGame _stickmanOnTouchCollider;
         private IDeathService _deathService;
 
         public GameLoopState(IGameFactory gameFactory, IGameStateMachine gameStateMachine, IDeathService deathService)
@@ -23,23 +21,22 @@ namespace Infrastructure.StateMachines.GameStateMachine.States
         }
 
         public void Enter() =>
-            RunPlayer();
+            RunGame();
 
-        private void RunPlayer()
+        private void RunGame()
         {
             _playerMovement = _gameFactory.Player.GetComponent<PlayerMovement>();
-            _cubeHolder = _gameFactory.Player.GetComponentInChildren<CubeHolder>();
-            _stickmanOnTouchCollider = _gameFactory.Player.GetComponentInChildren<ColliderOnWallTouchEndGame>();
 
+            EnableWarpEffect();
             StartPlayerMoving();
 
             _deathService.Happend += GoToEndgameState;
         }
 
-        private void GoToEndgameState() =>
-            _gameStateMachine.EnterState<EndGameState>();
+        public void Exit() =>
+            StopGame();
 
-        public void Exit()
+        private void StopGame()
         {
             _deathService.Happend -= GoToEndgameState;
 
@@ -49,8 +46,14 @@ namespace Infrastructure.StateMachines.GameStateMachine.States
         private void StartPlayerMoving() =>
             _playerMovement.StartMoving();
 
+        private void EnableWarpEffect() =>
+            _gameFactory.WarpEffect.SetActive(true);
+
         private void StopPlayerMoving() =>
             _playerMovement.StopMoving();
+
+        private void GoToEndgameState() =>
+            _gameStateMachine.EnterState<EndGameState>();
 
         public class Factory : PlaceholderFactory<IGameStateMachine, GameLoopState>
         {

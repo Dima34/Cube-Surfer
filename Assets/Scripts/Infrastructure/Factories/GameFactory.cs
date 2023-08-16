@@ -23,6 +23,7 @@ namespace Infrastructure.Factories
 
         public List<GameObject> ActiveLevelSections => _activeLevelSections;
         public GameObject Player => _player;
+        public GameObject WarpEffect => _warpEffect;
 
         public GameFactory(DiContainer container, IWallsProviderService wallsProviderService)
         {
@@ -104,9 +105,11 @@ namespace Infrastructure.Factories
             return text;
         }
 
-        public GameObject SpawnWarpEffect()
+        public GameObject SpawnWarpEffectDisabled()
         {
             _warpEffect = _container.InstantiatePrefabResource(ResourcePaths.WARP_EFFECT);
+            _warpEffect.SetActive(false);
+            
             return _warpEffect;
         }
 
