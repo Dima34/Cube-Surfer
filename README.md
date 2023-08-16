@@ -9,4 +9,4 @@ If **cubes** under the **Player** *collides* with the **barriers** - **player de
 <img src = "gameplay.gif"> </img>
 
 ## How to start game
-Open Cube-surfer.apk on Android device or start playing project from "*Initial*" scene.
+Start playing project from "*Initial*" scene. Unity version 202
